@@ -1,10 +1,18 @@
-import unicodedata
 import pandas as pd
+from unicodedata import normalize
+
+"""
+pandas
+"""
 
 
 class MediumBlogPost:
     """
     data object for parsing json file into proper format
+
+    input: kwargs is one json line, which is a dictionary
+
+    output: a row of dataframe or in a dictionary format
     """
     def __init__(self, **kwargs):
         self.title = self.__text_normalize(kwargs['title'])
@@ -24,7 +32,7 @@ class MediumBlogPost:
         1. unicode string normalization
         2. replace semi-colon with space
         """
-        return unicodedata.normalize('NFKD', text).replace(';', ' ')
+        return normalize('NFKD', text).replace(';', ' ')
 
     def to_dict(self):
         return {
@@ -42,4 +50,3 @@ class MediumBlogPost:
 
     def to_frame(self):
         return pd.DataFrame({k: [v] for k, v in self.to_dict().items()})
-
